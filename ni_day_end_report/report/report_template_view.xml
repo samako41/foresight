@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_ni_day_end_summary_report_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style type="text/css">
+                        <t t-call="ni_day_end_report.ni_style_layout"/>
+                    </style>
+                    <h2 class="text-center">
+                        <span>Day End Summary Report</span>
+                    </h2>
+
+                    <table width="100%" style="margin-top:2%">
+                        <tr>
+                            <td><strong>Date:</strong></td>
+                            <td> <p class="m-0" t-field="o.ni_date"/></td>
+                            <td><strong>Group By:</strong></td>
+                            <td> <p class="m-0" t-field="o.ni_report_by"/></td>
+                        </tr>
+                    </table>
+
+                    <table class="day_end_report_table" width="100%" style="margin-top:2%;border-bottom: none;vertical-align:middle">
+                            <tr style="background: #CCC">
+                                <th class="text-center"><span>Sr.No.</span></th>
+                                <th class="text-center"><span>Summary</span></th>
+                                <th class="text-center"><span>Count</span></th>
+                                <th class="text-center"><span>Total Amount</span></th>
+                            </tr>
+
+                        <t t-raw="o.action_get_summary_report_data_report()"/>
+                    </table>
+                    <t t-if="o.ni_product_report">
+                        <div style="margin-top:3%;" class="text-center">
+                        <p><b>Product Shipment/Delivery Done </b></p>
+                        </div>
+                        <table class="day_end_report_table" width="100%" style="margin-top:3%;border-bottom: none;vertical-align:middle">
+                                <tr style="background: #CCC">
+                                    <th class="text-center"><span>Sr.No.</span></th>
+                                    <th class="text-center"><span>Name</span></th>
+                                    <th class="text-center"><span>Internal Refrence</span></th>
+                                    <th class="text-center"><span>Barcode</span></th>
+                                    <th class="text-center"><span>Quantity</span></th>
+                                </tr>
+
+                            <t t-raw="o.action_get_summary_report_product()"/>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_ni_day_end_summary_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="ni_day_end_report.report_ni_day_end_summary_report_document"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

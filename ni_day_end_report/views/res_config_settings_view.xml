@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ni_res_config_settings_view_form_day_end_report" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.day.end.report</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='main_currency_setting_container']" position="after">
+                <h2>Day End Summary Report</h2>
+                <div class="row mt16 o_settings_container" name="ni_enable_day_end_report_setting_container">
+                     <div class="col-12 col-lg-6 o_setting_box" id="ni_enable_day_end_report_settings">
+                                <div class="o_setting_left_pane">
+                                    <field name="ni_enable_day_end_report"/>
+                                </div>
+                                <div class="o_setting_right_pane" name="ni_enable_day_end_report_accounting_right_pane">
+                                    <label for="ni_enable_day_end_report" string="Enable Day End Report Send By Mail" />
+                                    <div class="text-muted">
+                                        Enable Day End Report Send By Mail
+                                    </div>
+<!--                                     <div class="content-group">-->
+                                    <label for="ni_partner_ids" class="col-lg-3 o_light_label" attrs="{'invisible':[('ni_enable_day_end_report','=',False)]}"/>
+                                    <field name="ni_partner_ids" options="{'no_create_edit': True, 'no_open': True}" attrs="{'required':[('ni_enable_day_end_report','=',True)],'invisible':[('ni_enable_day_end_report','=',False)]}" widget="many2many_tags" />
+                                     <label for="ni_product_report" class="col-lg-3 o_light_label" attrs="{'invisible':[('ni_enable_day_end_report','=',False)]}"/>
+                                    <field name="ni_product_report" attrs="{'invisible':[('ni_enable_day_end_report','=',False)]}" />
+                                     <label for="ni_report_by" class="col-lg-3 o_light_label" attrs="{'invisible':[('ni_enable_day_end_report','=',False)]}"/>
+                                    <field name="ni_report_by" attrs="{'invisible':[('ni_enable_day_end_report','=',False)]}"/>
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                </div>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

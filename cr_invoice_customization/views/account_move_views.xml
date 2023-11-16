@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    to inherit the account.move to showing the invoice subtotal in words-->
+    <record id="cr_account_move_view_form" model="ir.ui.view">
+        <field name="name">cr.account.move.inherit.invoice</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                   <field name="service_number" attrs="{'readonly' : [('state','=', 'done')]}"/>
+                   <field name="tin_number" attrs="{'readonly' : [('state','=', 'done')]}"/>
+                    <label for="Service_date_from" string="Service Date" attrs="{'readonly' : [('state','=', 'done')]}"/>
+                    <div>
+                        <span>
+                            <label for="Service_date_from"/>
+                            <field name="Service_date_from"
+                                   attrs="{'readonly' : [('state','=', 'done')]}"/>
+                        </span>
+                        <br></br>
+                        <span>
+                            <label for="Service_date_to"/>
+                            <field name="Service_date_to"
+                                   attrs="{'readonly' : [('state','=', 'done')]}"/>
+                        </span>
+                    </div>
+                <field name="account_id" attrs="{'readonly' : [('state','=', 'done')]}"/>
+                <field name="payment_condition" attrs="{'readonly' : [('state','=', 'done')]}"/>
+                <field name="date" attrs="{'readonly' : [('state','=', 'done')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_user_id']" position="before">
+                <field name="po_order_desc" attrs="{'readonly' : [('state','=', 'done')]}"/>
+                <field name="vat_amount"/>
+            </xpath>
+        </field>
+     </record>
+</odoo>

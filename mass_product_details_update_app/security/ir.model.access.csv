@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_details,access_product_details,model_product_details,group_mass_update_product,1,1,1,1
+access_product_update,access_product_update,model_product_update,group_mass_update_product,1,1,1,1
+access_stock_quant,access_stock_quant,stock.model_stock_quant,group_mass_update_product,1,1,1,1

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<record id="expense_sheet_form_view_inherit" model="ir.ui.view">
+            <field name="name">hr.expense.sheet.form.inherite</field>
+            <field name="model">hr.expense.sheet</field>
+            <field name="priority" eval="8" />
+            <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_manager_approve']" position="after">
+                    <button name="approve_hr_expense_sheets" attrs="{'invisible': [('state', '!=', 'approved_manager')]}" string="Approve By Operation Manager" type="object" groups="dj_employee_expense_triple_approval.group_op_manager" class="oe_highlight o_expense_sheet_approve"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="is_manager" invisible="1"/>
+                </xpath>
+                
+                <xpath expr="//button[@name='approve_expense_sheets']" position="replace">
+                    <button name="approve_expense_sheets" attrs="{'invisible': [('state', '!=', 'approved_hr')]}" string="Approve By General Manager" type="object" groups="dj_employee_expense_triple_approval.group_gm_manager" class="oe_highlight o_expense_sheet_approve"/>
+                </xpath>
+                
+
+                <xpath expr="//button[@name='reset_expense_sheets']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('state', 'in', ['approved_hr', 'approved_manager'])]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='%(hr_expense.hr_expense_refuse_wizard_action)d']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('state', 'in', ['approved_hr', 'approved_manager'])]}</attribute>
+                </xpath>
+        </field>
+        </record>
+</odoo>

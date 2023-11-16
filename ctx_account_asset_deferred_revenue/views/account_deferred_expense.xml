@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © 2022 CorTex IT Solutions Ltd. <https://cortexsolutions.net/>
+     License OPL-1 -->
+<odoo>
+
+
+    <record id="view_account_asset_expense_form" model="ir.ui.view">
+        <field name="name">account.asset.expense.form</field>
+        <field name="model">ctx.account.asset</field>
+        <field name="arch" type="xml">
+            <form string="Expense Recognition">
+                <header>
+                    <button name="validate" states="draft" string="Confirm" type="object" class="oe_highlight"/>
+                    <button type="object" name="compute_depreciation_board" string="Compute Expense"
+                            states="draft"/>
+
+                    <button name="set_to_draft" string="Set to Draft" type="object"
+                            attrs="{'invisible': ['|', ('entry_count', '!=', 0), ('state', '!=', 'open')]}"/>
+                    <button name="%(ctx_account_asset_deferred_revenue.action_ctx_asset_modify)d" states="open" string="Modify Expense"
+                            type="action"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="open_entries" type="object" icon="fa-pencil"
+                                attrs="{'invisible': [('entry_count', '=', 0)]}">
+                            <field string="Related Expenses" name="entry_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Deferred Expense Name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Annually Paid Insurance" help="Deferred Expense Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id" string="Deferred Expense Type" domain="[('type', '=', 'expense')]"
+                                   context="{'default_type': 'expense'}" help="Deferred Expense Type"/>
+                            <field name="code"/>
+                            <field name="date" help="Date of Recognition"/>
+                            <field name="date_first_depreciation" string="Recognition Dates" help="Recognition Dates"/>
+                            <field name="first_depreciation_manual_date" string="First Recognition Date"
+                                   help="First Recognition Date"
+                                   attrs="{'invisible': [('date_first_depreciation', '!=', 'manual')],
+                                           'required': [('date_first_depreciation', '=', 'manual')]}"/>
+                            <field name="type" invisible="1"/>
+                             <field name="analytic_distribution" widget="analytic_distribution" groups="analytic.group_analytic_accounting"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="value" widget="monetary"
+                                   options="{'currency_field': 'currency_id'}" help="Gross value of Recognition"/>
+                            <field name="value_residual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="partner_id" string="Vendor" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'supplier'}"/>
+                            <field name="invoice_id" string="Invoice" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Expense Board">
+                            <field name="depreciation_line_ids" mode="tree" options="{'reload_whole_on_button': true}"
+                                   string="Expense Lines">
+                                <tree string="Expense Lines" decoration-info="(move_check == False)"
+                                      create="false">
+                                    <field name="depreciation_date" string="Expense Date" help="Expense Date"/>
+                                    <field name="amount" widget="monetary" string="Expense" help="Expense"/>
+                                    <field name="depreciated_value" readonly="1" string="Recognized Expense"
+                                           help="Recognized Expense"/>
+                                    <field name="remaining_value" readonly="1" widget="monetary" string="Residual"/>
+                                    <field name="move_check" widget="deprec_lines_toggler"
+                                           attrs="{'invisible': [('parent_state', '!=', 'open')]}"/>
+                                    <field name="move_posted_check" invisible="1"/>
+                                    <field name="parent_state" invisible="1"/>
+                                </tree>
+                                <form string="Expense Lines" create="false">
+                                    <group>
+                                        <group>
+                                            <field name="parent_state" invisible="1"/>
+                                            <field name="name" string="Expense" help="Expense"/>
+                                            <field name="sequence"/>
+                                            <field name="move_id" string="Expense Entry" help="Expense Entry"/>
+                                            <field name="move_check"/>
+                                            <field name="parent_state" invisible="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="amount" widget="monetary" string="Current Expense"
+                                                   help="Current Expense"/>
+                                            <field name="depreciation_date" string="Expense Date" help="Expense Date"/>
+                                            <field name="depreciated_value" string="Recognized Expense"
+                                                   help="Recognized Expense"/>
+                                            <field name="remaining_value" string="Next Period Expense"
+                                                   help="Next Period Expense"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Expense Information">
+                            <group>
+                                <!--                                <field name="method" widget="radio" attrs="{'invisible': [('type','=','sale')]}"/>-->
+                                <!--                                <field name="method_progress_factor"-->
+                                <!--                                       attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>-->
+                                <field name="method_time" string="Time Method Based On"
+                                       widget="radio" attrs="{'invisible': [('type','!=','purchase')]}"/>
+                                <field name="prorata" attrs="{'invisible': [('method_time','=','end')]}"/>
+                            </group>
+                            <group>
+                                <field name="method_number" string="Number of Recognitions"
+                                       help="Number of Recognitions"
+                                       attrs="{'invisible':[('method_time','=','end')],
+                                               'required':[('method_time','=','number')]}"/>
+                                <field name="method_period"/>
+                                <field name="method_end"
+                                       attrs="{'required': [('method_time','=','end')],
+                                               'invisible':[('method_time','=','number')]}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_asset_expense_tree" model="ir.ui.view">
+        <field name="name">account.asset.expense.tree</field>
+        <field name="model">ctx.account.asset</field>
+        <field name="arch" type="xml">
+            <tree string="Deferred Expense" decoration-info="(state == 'draft')" decoration-muted="(state == 'close')">
+                <field name="name" string="Deferred Expense Name"/>
+                <field name="category_id" string="Deferred Expense Type"/>
+                <field name="date" string="Expense Date"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="value"/>
+                <field name="value_residual" widget="monetary"/>
+                <field name="currency_id" groups="base.group_multi_currency"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="action_account_expense_form">
+        <field name="name">Deferred Expenses</field>
+        <field name="res_model">ctx.account.asset</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('category_id.type', '=', 'expense')]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_account_asset_expense_tree')}),
+            (0, 0, {'view_mode': 'kanban'}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_account_asset_expense_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new deferred expense
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_action_account_expense_recognition"
+              parent="account.menu_finance_entries_management"
+              action="action_account_expense_form"
+              sequence="102"
+              groups="account.group_account_manager"/>
+
+
+</odoo>

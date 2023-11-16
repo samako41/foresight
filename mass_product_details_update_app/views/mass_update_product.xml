@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- update Product details from product wizard -->
+        <record model="ir.ui.view" id="product_wizard_view">
+            <field name="name">product.update.form</field>
+            <field name="model">product.update</field>
+            <field name="arch" type="xml">
+                <form string="Product Details">
+                    <group string="Update Products Stock">
+                    </group>
+                    <field name="product_ids">
+                    <tree editable="top">
+                        <field name="product_id" readonly="1" force_save="1"/>
+                        <field name="current_quantity" readonly="1" force_save="1"/>
+                        <field name="update_quantity" required="1"/>
+                        <field name="lot_id"/>
+                        <field name="location_id" required="1"/>
+                    </tree>
+                    </field>
+                    <footer>
+                            <button name="product_details_update" string="Update Products Stock" 
+                              type="object" default_focus="1" class="oe_highlight" icon="fa-edit"/>
+                            <button string="Cancel" special="cancel" icon="fa-times-circle"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="update_product_action"
+            name="Mass Update Products Details"
+            binding_model="product.product"
+            res_model="product.update"
+            view_mode="form"
+            target="new"
+            view_id="mass_product_details_update_app.product_wizard_view" 
+            groups="mass_product_details_update_app.group_mass_update_product"/>
+
+    </data>
+</odoo>

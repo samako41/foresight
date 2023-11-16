@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="ni_style_layout">
+        <style type="text/css">
+            <style>
+
+                .day_end_report_table  {
+                                            border: 1px solid black;
+                                            }
+                .day_end_report_table th {
+                                            border: 1px solid black;
+                                            }
+                .day_end_report_table tr td{
+                                        border: 1px solid black;
+
+                                            border: 1px solid black;
+                                            padding: 0px;
+                                            }
+
+            </style>
+        </style>
+    </template>
+</odoo>

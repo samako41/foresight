@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="cr_view_partner_bank_employee" model="ir.ui.view">
+        <field name="name">cr.res.partner.bank.form.inherit.wiz</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="arch" type="xml">
+            <field name="acc_number" position="after">
+                <field name="ifsc_code"/>
+                <field name="branch_name"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem name="Bank Accounts" id="cr_bank_accounts_menuitem" action="account.action_new_bank_setting"
+                  parent="account.account_banks_menu" groups="account.group_account_manager" sequence="1"/>
+    <menuitem id="cr_menu_action_res_bank_form"
+        action="base.action_res_bank_form"
+        parent="account.account_banks_menu"
+        sequence="2"/>
+
+
+</odoo>

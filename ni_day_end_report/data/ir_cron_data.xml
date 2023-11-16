@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record forcecreate="True" id="scedular_send_end_day_report" model="ir.cron">
+        <field name="name">Send Mail Day End Summary Report</field>
+        <field name="model_id" ref="model_day_end_summary_report_wizard"/>
+        <field name="state">code</field>
+        <field name="code">model.ni_action_send_mail()</field>
+        <field eval="True" name="active"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+       <field eval="False" name="doall"/>
+    </record>
+</odoo>

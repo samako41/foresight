@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="res.groups" id="group_op_manager">
+        <field name="name">Operation Manager</field>
+        <field name="category_id" ref="base.module_category_extra"/>
+    </record>
+    <record model="res.groups" id="group_gm_manager">
+        <field name="name">General Manager</field>
+        <field name="category_id" ref="base.module_category_extra"/>
+    </record>
+</odoo>

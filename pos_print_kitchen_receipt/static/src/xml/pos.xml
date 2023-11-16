@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PrintkitchenReceiptButton" owl="1">
+        <div class="control-button" t-if="env.pos.config.print_kitchen_receipt">
+            <i class="fa fa-print"/>
+                Kitchen Receipt
+        </div>
+    </t>
+
+    <t t-name="PrintKitchenReceiptScreen" owl="1">
+        <div class="receipt-screen screen">
+            <div class="screen-content">
+                <t t-if="!env.isMobile">
+                    <div class="top-content">
+                        <div class="button back"
+                            t-on-click="() => this.showScreen('ProductScreen')">
+                            <i class="fa fa-angle-double-left fa-fw"></i>
+                            <span class="back_text">Back</span>
+                        </div>
+                        <div class="top-content-center"><h1>Kitchen Receipt</h1></div>
+                        <div class="button ok highlight"
+                            t-on-click="() => this.showScreen('ProductScreen')">
+                            <span class="next_text">Ok</span>
+                            <i class="fa fa-angle-double-right fa-fw"></i>
+                        </div>
+                    </div>
+                </t>
+
+                <div class="default-view">
+                    <div class="actions">
+                        <h1>How would you like to receive your receipt?</h1>
+                        <div class="buttons">
+                            <div class="button print" t-on-click="printReceipt">
+                                <i class="fa fa-print"></i> Print Receipt
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pos-receipt-container" t-ref="kitchen-order-receipt">
+                        <KitchenReceipt order="currentOrder"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="KitchenReceipt" owl="1">
+        <div class="pos-receipt">
+            <t t-if="receipt.company.logo">
+                <img class="pos-receipt-logo" t-att-src="receipt.company.logo" alt="Logo"/>
+                <br/>
+            </t>
+            <t t-if="!receipt.company.logo">
+                <h2 class="pos-receipt-center-align">
+                    <t t-esc="receipt.company.name" />
+                </h2>
+                <br/>
+            </t>
+            <div class="pos-receipt-contact">
+                <t t-if="receipt.company.contact_address">
+                    <div><t t-esc="receipt.company.contact_address" /></div>
+                </t>
+                <t t-if="receipt.company.phone">
+                    <div>Tel:<t t-esc="receipt.company.phone" /></div>
+                </t>
+                <t t-if="receipt.company.vat">
+                    <div><t t-esc="receipt.company.vat_label"/>:<t t-esc="receipt.company.vat" /></div>
+                </t>
+                <t t-if="receipt.company.email">
+                    <div><t t-esc="receipt.company.email" /></div>
+                </t>
+                <t t-if="receipt.company.website">
+                    <div><t t-esc="receipt.company.website" /></div>
+                </t>
+                <t t-if="receipt.header_html">
+                    <t t-raw="receipt.header_html" />
+                </t>
+                <t t-if="!receipt.header_html and receipt.header">
+                    <div style="white-space:pre-line"><t t-esc="receipt.header" /></div>
+                </t>
+                <t t-if="receipt.cashier">
+                    <div class="cashier">
+                        <div>--------------------------------</div>
+                        <div>Served by <t t-esc="receipt.cashier" /></div>
+                    </div>
+                </t>
+            </div>
+            <br /><br />
+
+            <!-- Orderlines -->
+
+            <div class="orderlines">
+                <t t-call="KitchenLinesReceipt"/>
+            </div>
+
+            <div class="before-footer" />
+
+            <!-- Footer -->
+            <div t-if="receipt.footer_html"  class="pos-receipt-center-align">
+                <t t-raw="receipt.footer_html" />
+            </div>
+
+            <div t-if="!receipt.footer_html and receipt.footer"  class="pos-receipt-center-align" style="white-space:pre-line">
+                <br/>
+                <t t-esc="receipt.footer" />
+                <br/>
+                <br/>
+            </div>
+
+            <br/>
+            <div class="pos-receipt-order-data">
+                <div><t t-esc="receipt.name" /></div>
+                <t t-if="receipt.date.localestring">
+                    <div><t t-esc="receipt.date.localestring" /></div>
+                </t>                
+            </div>
+        </div>
+    </t>
+
+    <t t-name="KitchenLinesReceipt" owl="1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <t t-foreach="receipt.orderlines" t-as="line" t-key="line.id">
+                <tr>
+                    <td width="80%">
+                        <div class="row">
+                            <span t-esc="line.product_name_wrapped[0]"/>
+                            <WrappedProductNameLines line="line" />
+                        </div>
+                        
+                        <t t-if="line.customer_note">
+                            <div class="row">
+                                <span class="pos-receipt-left-padding pos-receipt-customer-note">
+                                    <t t-esc="line.customer_note"/>
+                                </span>
+                            </div>
+                        </t>
+                    </td>
+                    <td width="20%" align="center">
+                        <span t-esc="line.quantity"/>
+                    </td>
+                </tr>
+            </t>
+        </table>        
+    </t>
+
+</templates>

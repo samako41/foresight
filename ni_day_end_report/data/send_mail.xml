@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Email template -->
+
+	<record id="ni_email_template_day_end_report" model="mail.template">
+		<field name="name">Day End Summary Report - Send by Email</field>
+		<field name="email_from">${user.email}</field>
+		<field name="subject">${object.company_id.name} Day End Summary Report </field>
+		<field name="email_to">${object.email}</field>
+		<field name="model_id" ref="model_day_end_summary_report_wizard"/>
+		<field name="report_template" ref="ni_day_end_report.ni_day_end_summary_reports"/>
+		<field name="report_name">Day End Summary Reports</field>
+		<field name="lang">${object.lang}</field>
+		<field name="auto_delete" eval="True"/>
+		<field name="body_html">
+			<![CDATA[
+				<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+				    <p>Hello,</p>
+				    <p>Day End Summary Report: </p>
+
+
+				</div>
+            ]]>
+		</field>
+	</record>
+
+    </data>
+</odoo>

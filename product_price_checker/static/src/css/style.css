@@ -1,0 +1,31 @@
+.checker, .checker::after, .checker::before {
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
+	cursor: default;
+}
+
+.checker_description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.checker_clock {
+    position: absolute;
+    top: 0;
+    left: auto;
+    bottom: auto;
+    right: 0;
+}
+
+.checker input::-webkit-outer-spin-button,
+.checker input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.checker input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
